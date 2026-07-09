@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());        // ← moved above the routes
 app.use('/api/auth', authRoutes);
 
-// simple health check + DB connection test
+// simple health check + DB connection test 
 app.get('/health', async (req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;

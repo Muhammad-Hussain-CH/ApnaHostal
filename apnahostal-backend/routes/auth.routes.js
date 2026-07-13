@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { z } = require('zod');
 const { PrismaClient } = require('@prisma/client');
-
+const { requireAuth, requireRole } = require('../middleware/auth.middleware');
 const router = express.Router();
 const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
@@ -14,7 +14,7 @@ const registerSchema = z.object({
   phone: z.string().optional(),
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', requireAuth, requireRole('ADMIN'), async (req, res) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
